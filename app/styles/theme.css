@@ -1,0 +1,123 @@
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-header);
+
+  --breakpoint-xs: 19rem;
+
+  --color-highest: var(--highest);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+}
+
+:root {
+  --neutral-100: hsl(240, 5%, 96%);
+  --neutral-200: hsl(240, 6%, 90%);
+  --neutral-300: hsl(240, 5%, 84%);
+  --neutral-400: hsl(240, 5%, 65%);
+  --neutral-500: hsl(240, 4%, 46%);
+  --neutral-600: hsl(240, 5%, 34%);
+  --neutral-700: hsl(240, 5%, 26%);
+  --neutral-800: hsl(240, 4%, 16%);
+  --neutral-900: hsl(240, 6%, 10%);
+
+  --highest: hsl(240, 5%, 100%);
+  --card: hsl(240, 5%, 96%);
+  --background: hsl(240, 5%, 84%);
+  --popover: hsl(240, 5%, 65%);
+  --border: hsl(240, 4%, 46%);
+  --input: hsl(240, 5%, 34%);
+  --muted: hsl(240, 4%, 16%);
+
+  --primary: hsl(204, 62%, 60%);
+  --secondary: hsl(92, 45%, 32%);
+  --accent: hsl(190, 85%, 77%);
+  --ring: hsl(78, 33%, 50%);
+
+  --destructive: hsl(344, 100%, 50%);
+  --success: hsl(90, 30%, 35%);
+
+  --foreground: hsl(0, 0%, 5%);
+  --card-foreground: hsl(0, 0%, 5%);
+  --popover-foreground: hsl(0, 0%, 5%);
+  --primary-foreground: hsl(0, 0%, 5%);
+  --secondary-foreground: hsl(0, 0%, 5%);
+  --muted-foreground: hsl(0, 0%, 30%);
+  --accent-foreground: hsl(0, 0%, 5%);
+  --destructive-foreground: hsl(0, 0%, 0%);
+
+  --radius: 0.35rem;
+}
+
+.dark {
+--neutral-100: hsl(42, 30%, 10%);
+--neutral-200: hsl(42, 35%, 15%);
+--neutral-300: hsl(42, 40%, 20%);
+--neutral-400: hsl(42, 45%, 30%);
+--neutral-500: hsl(42, 50%, 40%);
+--neutral-600: hsl(42, 60%, 50%);
+--neutral-700: hsl(42, 70%, 60%);
+--neutral-800: hsl(42, 80%, 70%);
+--neutral-900: hsl(42, 90%, 80%);
+
+--highest: hsl(42, 100%, 95%);
+--card: hsl(42, 20%, 15%);
+--background: hsl(42, 20%, 10%);
+--popover: hsl(42, 25%, 20%);
+--border: hsl(42, 30%, 30%);
+--input: hsl(42, 35%, 35%);
+--muted: hsl(42, 40%, 45%);
+
+  --primary: hsl(204, 62%, 60%);
+  --secondary: hsl(92, 45%, 32%);
+  --accent: hsl(220, 50%, 36%);
+  --ring: hsl(220, 50%, 36%);
+
+  --destructive: hsl(344, 100%, 50%);
+  --success: hsl(90, 30%, 35%);
+
+  --foreground: hsl(0, 0%, 95%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --muted-foreground: hsl(0, 0%, 70%);
+  --accent-foreground: hsl(0, 0%, 95%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+
+  --radius: 0.35rem;
+}
