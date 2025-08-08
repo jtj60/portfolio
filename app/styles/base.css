@@ -5,7 +5,7 @@
 
   body {
     font-family: var(--font-sans), sans-serif;
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
   h1,
   h2,

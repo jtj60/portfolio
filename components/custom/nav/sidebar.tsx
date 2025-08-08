@@ -4,13 +4,15 @@ import Drawer from '@/components/ui/drawer'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 import { protectedRoutes } from '@/types/routes'
 import { useDrawerStore } from '@/store/drawerStore'
+import { cn } from '@/lib/utils'
+import { ShineBorder } from '@/components/ui/shine-border'
 
 export default function Sidebar() {
   const pathname = usePathname()
-
   const { activeDrawer, closeDrawer } = useDrawerStore()
   const isDrawerOpen = activeDrawer === 'sidebar'
 
@@ -26,35 +28,75 @@ export default function Sidebar() {
       label: route.mobileLabel,
     }))
 
+  const listVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
   const drawerContent = (
     <div className="w-full flex-col">
-      <nav aria-label="Primary site navigation" className="flex-col items-center pb-5">
-        <ul className="flex-col p-5 gap-3">
-          {menuItems.map((item) => {
+      <nav aria-label="Primary site navigation" className="flex flex-col w-full mt-20">
+        <motion.ul
+          className="flex flex-col gap-8 w-full"
+          variants={listVariants}
+          initial="hidden"
+          animate={isDrawerOpen ? 'visible' : 'hidden'}
+        >
+          {menuItems.map((item, idx) => {
+            const offsetClass =
+              idx % 2 === 0
+                ? 'rounded-r-none pr-20 bg-neutral-800'
+                : 'rounded-l-none pl-20 bg-neutral-800'
+
             const isActive = pathname === item.href
-            const linkClasses = isActive
-              ? 'text-primary-gradient'
-              : 'text-neutral-200 dark:text-neutral-800  hover-text-primary-gradient'
+
             return (
-              <li className="flex-col items-center pb-5 text-xl" key={item.key}>
-                <div className="flex items-center justify-center">
-                  <Link href={item.href} className={linkClasses}>
-                    {item.label}
-                  </Link>
-                </div>
-              </li>
+              <motion.li
+                key={item.key}
+                className={cn(idx % 2 === 0 ? 'ml-20' : 'mr-20', 'relative overflow-hidden')}
+                initial={{ x: idx % 2 === 0 ? '100%' : '-100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: idx % 2 === 0 ? '100%' : '-100%' }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+              >
+                {isActive && (
+                  <ShineBorder
+                    shineColor={['#3F3F46', '#27272A', '#18181B']}
+                    borderTop={2}
+                    borderBottom={2}
+                    borderRight={idx % 2 === 0 ? 0 : 2}
+                    borderLeft={idx % 2 === 0 ? 2 : 0}
+                    className={cn(
+                      'z-1 rounded-lg',
+                      idx % 2 === 0 ? 'rounded-r-none' : 'rounded-l-none'
+                    )}
+                  />
+                )}
+                <Link
+                  href={item.href}
+                  className={cn(
+                    'block text-center text-2xl tracking-wide py-3 rounded-lg raised-off-page-dark text-white',
+                    offsetClass,
+                    
+                  )}
+                >
+                  {item.label}
+                </Link>
+              </motion.li>
             )
           })}
-        </ul>
+        </motion.ul>
       </nav>
     </div>
   )
 
   return (
     <Drawer open={isDrawerOpen} setOpen={closeDrawer}>
-      <div className="w-screen h-full bg-neutral-800/50 dark:bg-neutral-200/50 backdrop-blur-xl border-t-1 border-border">
-        {drawerContent}
-      </div>
+      <div className="w-screen h-full">{drawerContent}</div>
     </Drawer>
   )
 }

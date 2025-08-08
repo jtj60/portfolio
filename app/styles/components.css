@@ -83,6 +83,22 @@
   dark:shadow-[inset_0px_1px_0px_hsla(0,0%,100%,.1),0px_1px_3px_hsla(0,0%,0%,.2)];
 }
 
+.raised-off-page-dark {
+  @apply shadow-[inset_0px_1px_0px_hsla(0,0%,100%,.1),0px_1px_3px_hsla(0,0%,0%,.2)]
+  dark:shadow-[inset_0px_1px_0px_hsla(0,0%,99%,1),0px_1px_3px_hsla(0,0%,0%,.2)];
+}
+.raised-off-page-primary {
+  @apply
+    shadow-[inset_0px_1px_0px_hsla(294.6,3.1%,94.3%,.45),0px_1px_3px_hsla(0,0%,0%,.2)]
+    dark:shadow-[inset_0px_1px_0px_hsla(293.7,49.7%,38%,0.1),0px_1px_3px_hsla(0,0%,0%,.2)];
+}
+
+.raised-off-page-secondary {
+  @apply
+    shadow-[inset_0px_1px_0px_hsla(318.9,3.9%,95.2%,.45),0px_1px_3px_hsla(0,0%,0%,.2)]
+    dark:shadow-[inset_0px_1px_0px_hsla(325.6,42.4%,40.1%,0.1),0px_1px_3px_hsla(0,0%,0%,.2)];
+}
+
 .shadow {
   -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
   filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
