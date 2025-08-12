@@ -36,7 +36,7 @@ export default function Shell() {
       <div className="hidden lg:flex p-4 px-20">
         <div className="flex items-center justify-between w-full gap-2">
           <Link href="/" className="px-0">
-            <Logo height={64} size={128} />
+            <Logo height={64} size={128} className='text-muted'/>
           </Link>
 
           <div className="flex items-end">
@@ -74,7 +74,7 @@ export default function Shell() {
       <div className="flex lg:hidden py-4 px-3">
         <div className="flex items-center gap-2">
           <Link href="/" className="px-0">
-            <Logo height={48} size={96} />
+            <Logo height={48} size={96} className='text-muted' />
           </Link>
         </div>
         <div className="lg:hidden flex items-center ml-auto gap-2">
