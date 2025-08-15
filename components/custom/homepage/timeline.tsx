@@ -9,18 +9,18 @@ export default function Timeline() {
     <div className="flex flex-col w-full justify-center items-center">
       <SectionTitle title="Career Timeline" />
 
-      <div className="relative w-full max-w-7xl mx-auto">
-        <div className="hidden md:block absolute left-1/2 right-1/2 -translate-x-1/2 -top-9.5 -bottom-13 z-10 pointer-events-none">
+      <div className="hidden relative md:block w-full max-w-7xl mx-auto">
+        <div className="absolute left-1/2 right-1/2 -translate-x-1/2 top-0 bottom-0 pointer-events-none">
           <ShineBorder
             shineColor={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
-            borderTop={0}
-            borderBottom={0}
-            borderRight={0}
-            borderLeft={4}
-            className="z-10 h-full w-0"
+            borderTop={2}
+            borderBottom={2}
+            borderRight={2}
+            borderLeft={2}
+            className="z-0 h-full w-0"
           />
         </div>
-        <div className="hidden md:flex flex-col gap-12">
+        <div className="flex flex-col gap-12">
           {timelineNodes.map((node, index) => (
             <div
               key={index}
@@ -32,7 +32,36 @@ export default function Timeline() {
                   <BigNode node={node} position="right" />
                 </div>
                 <div className="min-w-1/2 max-w-1/2 pt-25">
-                  <ProjectItems projects={node?.projects ?? []} index={index} />
+                  <ProjectItems node={node} index={index} />
+                </div>
+              </>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="md:hidden relative w-full max-w-7xl mx-auto">
+        <div className="absolute left-8 top-0 bottom-0 pointer-events-none">
+          <ShineBorder
+            shineColor={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
+            borderTop={2}
+            borderBottom={2}
+            borderRight={2}
+            borderLeft={2}
+            className="z-0 h-full w-0"
+          />
+        </div>
+        <div className="flex flex-col gap-6 md:gap-12">
+          {timelineNodes.map((node, index) => (
+            <div
+              key={index}
+              className="relative flex w-full justify-between items-start w-full h-full"
+            >
+              <>
+                <div className="w-full">
+                  <ParagraphItem node={node} index={index} />
+                  <ProjectItems node={node} index={index} />
+                  <BigNode node={node} position="right" />
                 </div>
               </>
             </div>
@@ -45,18 +74,20 @@ export default function Timeline() {
 
 function ParagraphItem({ node, index }: { node: TimelineNode; index: number }) {
   return (
-    <div className={cn('relative w-full pr-20')}>
-      <div className={cn('text-left w-full text-right')}>
-        <div className="text-2xl md:text-6xl text-neutral-900 pb-1">{node.year}</div>
-        <div className={cn('text-xl md:text-4xl font-bold pb-4 tracking-wide', node.titleColor)}>
-          {node.title}
+    <div className={cn('relative w-full pl-20 pr-6 md:pl-0 md:pr-20 pb-6 md:pb-0')}>
+      <div className={cn('text-left md:text-right w-full')}>
+        <div className="text-3xl md:text-6xl text-neutral-900 mt-1 md:mt-0 md:pb-1 font-bold">
+          {node.year}
         </div>
-        <p
+        <div
           className={cn(
-            'text-neutral-700 text-xs md:text-base whitespace-pre-line',
-            index === timelineNodes.length - 1 && 'pb-10'
+            'text-2xl md:text-4xl font-bold pb-2 md:pb-4 md:tracking-wide',
+            node.titleColor
           )}
         >
+          {node.title}
+        </div>
+        <p className={cn('text-neutral-700 text-sm md:text-base whitespace-pre-line')}>
           {node.paragraph}
         </p>
       </div>
@@ -68,10 +99,10 @@ function BigNode({ node, position }: { node: TimelineNode; position: string }) {
   return (
     <div
       className={cn(
-        'absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-20 justify-self-center h-full pl-1'
+        'absolute left-1.5 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 z-20 justify-self-center h-full pl-1'
       )}
     >
-      <div className="relative h-14 w-14 md:h-16 md:w-16 rounded-full backdrop-blur-xs bg-white/10 flex items-center justify-center raised-off-page">
+      <div className="hidden md:flex relative h-16 w-16 rounded-full backdrop-blur-xs bg-white/10 flex items-center justify-center raised-off-page">
         <Image
           src={node.imageUrl}
           alt={`${node.title} logo`}
@@ -80,30 +111,51 @@ function BigNode({ node, position }: { node: TimelineNode; position: string }) {
           className="object-contain z-0"
         />
       </div>
+      <div className="relative md:hidden h-12 w-12 rounded-full backdrop-blur-xs bg-white/10 flex items-center justify-center raised-off-page">
+        <Image
+          src={node.imageUrl}
+          alt={`${node.title} logo`}
+          width={node.mobileSize}
+          height={node.mobileSize}
+          className="object-contain z-0"
+        />
+      </div>
     </div>
   )
 }
 
-function ProjectItems({ projects, index }: { projects: TimelineNodeProject[]; index: number }) {
+function ProjectItems({ node, index }: { node: TimelineNode; index: number }) {
   return (
-    <div className="relative flex flex-col gap-8 w-full">
-      {projects?.map((project, proj_index) => (
-        <div className={cn('relative flex flex-col pl-10 w-full text-left')} key={proj_index}>
-          <div className={cn('text-xl md:text-2xl font-bold pb-1 tracking-wide text-neutral-600')}>
-            {project.year}
-          </div>
-          <div className={cn('text-lg md:text-xl font-bold pb-4 tracking-wide text-neutral-900')}>
-            {project.title}
+    <div className="relative flex flex-col gap-6 md:gap-8 w-full md:pl-0">
+      {node.projects?.map((project, proj_index) => (
+        <div className={cn('relative flex flex-col w-full text-left')} key={proj_index}>
+          <div className="pl-20 pr-6 md:pl-8 md:pr-0">
+            <div
+              className={cn(
+                'text-xl md:text-2xl font-semibold md:font-bold pb-0 md:pb-1 tracking-wide text-neutral-600'
+              )}
+            >
+              {project.year}
+            </div>
+            <div
+              className={cn(
+                'text-lg md:text-xl font-semibold md:font-bold pb-1 md:pb-4 md:tracking-wide',
+                node.titleColor
+              )}
+            >
+              {project.title}
+            </div>
+
+            <p
+              className={cn(
+                'text-neutral-700 text-sm md:text-base whitespace-pre-line',
+                index === timelineNodes.length - 1 && ''
+              )}
+            >
+              {project.paragraph}
+            </p>
           </div>
 
-          <p
-            className={cn(
-              'text-neutral-700 text-xs md:text-base whitespace-pre-line',
-              index === timelineNodes.length - 1 && 'pb-10'
-            )}
-          >
-            {project.paragraph}
-          </p>
           <SmallNode />
         </div>
       ))}
@@ -113,7 +165,7 @@ function ProjectItems({ projects, index }: { projects: TimelineNodeProject[]; in
 
 function SmallNode() {
   return (
-    <div className="absolute z-50 -translate-x-1/2 top-1 left-[2px] bottom-0 h-4 w-4 md:h-6 md:w-6 rounded-full backdrop-blur-xs bg-white/10 flex items-center justify-center raised-off-page" />
+    <div className="absolute z-50 md:-translate-x-1/2 top-1 left-6.5 md:left-[2px] bottom-0 h-4 w-4 md:h-6 md:w-6 rounded-full backdrop-blur-xs bg-white/10 flex items-center justify-center raised-off-page" />
   )
 }
 
@@ -142,18 +194,32 @@ const timelineNodes = [
     imageUrl: '/logos/arkansas.png',
     year: '2016',
     title: 'University of Arkansas',
-    paragraph: `I started my college career at the University of Arkansas, pursuing a degree infinance. I spent the first year mostly doing general education requirements, with a sprinkling of business classes thrown in. The second year was more business focused, and I slowly started realizing that business probably wasn't for me. Close to the start of the third year, I was sitting in the lecture hall listening to the professor discuss the finer points of accounting. Without quite realizing what I was doing, I stood up and walked out. On the bus home, the plan started to formulate. I was going to transfer to Texas State, and switch my major to philosophy! That night I called my parents. They were fine with the school switch, but not so much the major. I needed a more practical major if I wanted to go through with my plan.`,
+    paragraph: `I started my college career at the University of Arkansas, pursuing a degree in finance. It took me a few years, but slowly I recognized business probably wasn't for me. At the beginning of my junior year, I happened to be sitting in a lecture hall learning all about the finer points of accounting. Without quite realizing what I was doing, I stood up and walked out. On the bus home, a plan started to formulate. A few months later, I found myself in a different lecture hall — this time learning the foundations of computer science at Texas State University.`,
     borderColor: 'border-red-700',
     paragraphBorder: 'border-red-700',
     titleColor: 'text-red-700',
     size: 100,
     mobileSize: 100,
+    projects: [
+      {
+        title: 'Business Law',
+        year: 'August 2017',
+        paragraph: `My favorite course across both majors, Business Law provided a foundation that would prove surprisingly valuable years later when I launched Dorado.`,
+        skills: ['C++'],
+      },
+      {
+        title: 'Finite Math',
+        year: 'January 2018',
+        paragraph: `An introduction to concepts I would later revisit in Discrete Math, this course was the first to truly challenge me academically: and I discovered I quite liked the challenge.`,
+        skills: ['C++'],
+      },
+    ],
   },
   {
     imageUrl: '/logos/texas-state.png',
     year: '2019',
     title: 'Texas State University',
-    paragraph: `The search for a new major didn't take long. After the philosophy veto, I proposed my backup — computer science — which they accepted without issue. I didn't know the first thing about computer science or software engineering; it was essentially a whim based on “well I've always liked computers...” The first semester was rough. The classes themselves were more challenging than what I was used to, and, coupled with being in an entirely new city, I struggled quite a bit. The following summer, I realized it was time to buckle down, and that's what I did. Something finally clicked with computer science, and I began devoting all my spare time to it.`,
+    paragraph: `When I started at Texas State, I knew virtually nothing about computer science or software engineering. The first semester was a steep learning curve—the coursework was far more demanding than I was used to, and adjusting to life in a new city added to the challenge. Despite the initial struggles, I persevered, and over time, everything began to click.`,
     borderColor: 'border-amber-900',
     paragraphBorder: 'border-amber-900',
     titleColor: 'text-amber-900',
@@ -163,14 +229,20 @@ const timelineNodes = [
       {
         title: 'Elo Rankings',
         year: 'June 2020',
-        paragraph: `A simple project that outputs matchup predictions based on leaguewide match results up to thatp point. It utilizes a basic Elo formula popularized by Chess rankings. Needs larger sample size and more meaningful input to increase accuracy.`,
+        paragraph: `Built a simple program to generate matchup predictions based on league-wide match results, using the Elo rating formula popularized in chess. While functional, the model required a larger dataset and more meaningful inputs to improve accuracy.`,
 
         skills: ['C++'],
       },
       {
         title: 'NBA Scoring Margin Predictor',
         year: 'October 2021',
-        paragraph: `Final project for my Machine Learning course. We decided to attempt predicting the scoring margin of NBA games. The process was straightfoward: ingest all box score data (game stats) from the previous season, add additional advanced stats, manipulate and normalize data, and run various ML models. Our resulting scores ranged from 18-21%. For better accuracy, we would need to dive deeper into the data. Using players instead of teams, historical matchups between players, etc...`,
+        paragraph: `For my Machine Learning course's final project, I worked on predicting NBA game scoring margins. We ingested box score data from the previous season, added advanced stats, normalized the dataset, and ran various ML models. Our predictions ranged from 18-21% accuracy. We identified opportunities for improvement, such as incorporating player-level data, historical player matchups, and other deeper statistical features.`,
+        skills: ['Python'],
+      },
+      {
+        title: 'Auction Draft Discord Bot',
+        year: 'November 2021',
+        paragraph: `My first substantial software development project. I approached the admins of an amateur DOTA 2 league and offered to build a Discord bot to run our seasonal player draft. With guidance from a mentor, I delivered a feature-complete bot in time for draft day. It included automated bidding logic, timers, fallback rules, and robust error handling, serving hundreds of league members in a live, downtime-free event.`,
         skills: ['Python'],
       },
     ],
@@ -180,48 +252,89 @@ const timelineNodes = [
     imageUrl: '/logos/sock-club.png',
     year: '2022',
     title: 'Sock Club',
-    paragraph: `My professional career began at a small startup in Austin, called Sock Club. They were a custom sock company. Essentially, customers would send in ideas and logos, the design team would come up with sock designs, and then they would be sent off to the factory for production. I joined the team just as development began on their new major effort, a joint storefront and customer dashboard. While I aided in that effort - fixing UI bugs and helping with the migration to NextJS, most of my time was spent building two things - a Logo Color Converter and a Design Knittability Tool. 
-                     
-            The Logo Color Converter was something the CEO desired for a long time. Sock Club had 52 yarn colors, but logos would come in with an incredible amount of variation between pixels. The design team had to manually convert each pixel into a yarn color, and this could take hours and hours for each logo. Using ImageMagick color manipulations and palette mapping, my tool achieved a 95% accuracy on logo conversions.
-            
-            The Design Knittability tool had also been long-desired. Our factory machines had certain specifications and rules, and if those rules were broken, a template could not be used. Our designs were sent back multiple times per week, and it was a pain for both our design team and for the factories. My product manager and I sat down to brainstorm, and realized that instead of trying to recreate the rules with a ton of conditionals, we just needed to simulate the machine itself. I built a state machine to run the templates through, and it predicted 'knittability' with 100% confidence. As far as I'm aware, none of the templates that my tool approved have been sent back to date.  
-            `,
+    paragraph: `My professional career began at Sock Club, a small Austin-based startup specializing in custom socks. Customers would submit ideas and logos, the design team would create sock patterns, and the factory would handle production. I joined just as development began on a major new initiative: a unified storefront and customer dashboard. While I contributed to that project, my most impactful work was developing the Logo Color Converter and the Will-it-Knit tool.`,
     borderColor: 'border-red-500',
     paragraphBorder: 'border-red-500',
     titleColor: 'text-red-500',
     size: 50,
-    mobileSize: 45,
+    mobileSize: 40,
+    projects: [
+      {
+        title: 'Customer Portal',
+        year: 'June 2022',
+        paragraph: `Migrated the public-facing frontend from Rails to Next.js, improving site performance and user experience for over 170,000 annual visitors. This involved iterative enhancements, UI consistency improvements, and cross-browser/device compatibility fixes. I also triaged frontend bugs and resolved persistent UI inconsistencies, improving maintainability and user satisfaction.`,
+        skills: ['NextJS', 'React', 'Postgres', 'Ruby on Rails'],
+      },
+      {
+        title: 'Logo Color Converter',
+        year: 'October 2022',
+        paragraph: `Developed a long-requested tool to automate logo color matching. Sock Club had 52 yarn colors, but incoming logos often contained subtle variations—sometimes 10 pixels that appeared identical were actually slightly different colors. Previously, designers manually mapped each pixel to the closest yarn color, a process that could take hours. Using ImageMagick for posterization and palette mapping, I built a tool that achieved 95% accuracy in automated conversions, drastically reducing turnaround time.`,
+        skills: ['Ruby on Rails'],
+      },
+      {
+        title: 'Will-it-Knit Tool',
+        year: 'November 2022',
+        paragraph: `Created a tool to verify if a design template could be knitted by the factory's machines. Previously, templates that violated machine specifications were returned multiple times per week, wasting hours for both the design/operations team and the factory. Instead of encoding hundreds of rules as conditionals (as a previous, non-functional tool attempted), I simulated the knitting machine as a state machine. The tool has maintained a 100% approval accuracy—no template it approved has ever been rejected.`,
+        skills: ['Ruby on Rails'],
+      },
+    ],
   },
   {
     imageUrl: '/logos/gmf.png',
     year: '2023',
     title: 'General Motors Financial',
-    paragraph: `I continued my journey at GMF, the captive finance arm of General Motors. Among many things, GMF handles financing for General Motors vehicles. I joined the Cybersecurity organization as a member of the vulnerability management team. Our team was responsible for detecting and reporting all infrastructure and software vulnerabilities across the company. We used a variety of tools to achieve this, and I was hired to put the results of those tools onto an Internal Dashboard for use by all infrastructure and development teams across the company.
-                     
-            There were three developers working on this project with me. Our lead had many responsibilities outside of this project, but he was there to guide me on architecture and design decisions. Another member of our team handled most of the dev ops work. I was responsible for building both the frontend and backend, along with designing the UI/UX, and architecting the database. 
-            
-            Due to the nature of the data we were providing to our users, this app required extensive security protocols. We were required to abide by the principle of least access, and employed the organization's Azure Active Directory (Entra) via MSAL to handle the RBAC solution. Furthermore, we had to have near perfect scores within our vulnerability tools to 'set an example'. Upon release, teams across the company had access to their real-time vulnerabilities.
-            `,
+    paragraph: `At GMF — the captive finance arm of General Motors—I joined the Cybersecurity organization's Vulnerability Management team. We safeguarded the company's infrastructure and applications by detecting, ingesting, and reporting vulnerabilities across the enterprise, ensuring risks were identified and addressed quickly.`,
     borderColor: 'border-blue-600',
     paragraphBorder: 'border-blue-600',
     titleColor: 'text-blue-600',
     size: 45,
-    mobileSize: 40,
+    mobileSize: 35,
+    projects: [
+      {
+        title: 'Vulnerability Management',
+        year: 'March 2023',
+        paragraph: `As part of my daily responsibilities, I supported developers across the company in identifying and resolving vulnerabilities. This involved reviewing and interpreting their code, pinpointing the root cause of security issues, and finally providing both clear and actionable guidance to help them implement secure remediations of their vulnerabilities.`,
+        skills: ['VM Tooling', 'Azure'],
+      },
+      {
+        title: 'Legacy Code and Database Maintenance',
+        year: 'March 2023',
+        paragraph: `Our legacy codebase was extensive and often difficult to navigate. A key initiative was cleaning and refactoring this code without disrupting critical vulnerability ingestion and reporting processes. The work involved large Python and PHP codebases, as well as complex SQL scripts. Debugging could take days to trace a single issue, followed by additional time to implement and validate a fix.`,
+        skills: ['Python', 'Postgres'],
+      },
+      {
+        title: 'EVMS Dashboard',
+        year: 'May 2023',
+        paragraph: `My primary focus at GMF was developing the EVMS dashboard alongside two other developers. Our team lead guided architectural and design decisions, while another teammate managed deployments and DevOps. My responsibilities spanned both the frontend and backend, including UI/UX design and database architecture. 
+            
+            Given the sensitivity of the data presented to users, we implemented strict security measures, adhering to the principle of least privilege. We integrated the organization's Azure Active Directory (Entra) via MSAL to provide a robust RBAC solution. Additionally, we were required to maintain near-perfect scores in vulnerability scans to set a security benchmark for the company. Upon release, teams across the organization gained access to real-time insights into their security vulnerabilities.`,
+        skills: ['NodeJS', 'React', 'Docker', 'Kubernetes', 'Postgres', 'Azure'],
+      },
+    ],
   },
   {
     imageUrl: '/logos/dorado.png',
     year: '2025',
     title: 'Dorado Metals Exchange',
-    paragraph: `Towards the end of my time at GMF, my manager let the whole team know that most of the software engineering responsibilities were going away. I figured I was at a good point in my career to try and strike out on my own. I decided to form the business a buddy and I had been discussing for several years - Dorado Metals Exchange was born. Our goal was to take the shady business that is buying and selling precious metals, and build a company that customers can trust. Transparency, convenience, trustworthiness - these would (and do) help us stand out from the rest. I'm ostensibly the CTO, and handle all of the development. Although as with any startup, I've been required to wear many hats. Talking to customers, handling social media, balancing our books - I've done it all.
-
-            On the development side, I decided to go with a stack I was comfortable with - Express/NodeJS/Postgres on the backend, NextJS and Typescript on the frontend. As the only developer on our team, I've handled everything. Authentication and authorization, database architecture and management, UI/UX design, 3rd party API integration, dev ops, testing... If I had known all what it would take when I began, I'm not sure I would have started in the first place.
-
-            While Dorado is going to remain in operation, my part in it is over. Like most startups, it hasn't taken off quite the way we wanted/expected/hoped. The development is 'done', and any maintenance work that pops up can be done in my spare time. I'm extremely proud of Dorado, it might represent a short period of my life, but I've learned more during it than at any other point.
-            `,
+    paragraph: `Towards the end of my time at GMF, I decided to take the leap and launch a business my friend and I had been planning for years - Dorado Metals Exchange. Our mission was to bring transparency, convenience, and trust to an industry often clouded by secrecy and exploitation.`,
     borderColor: 'primary-gradient-border-left',
     paragraphBorder: 'primary-gradient-border-bottom',
     titleColor: 'text-primary-gradient',
     size: 35,
-    mobileSize: 35,
+    mobileSize: 30,
+    projects: [
+      {
+        title: 'Startup Operations',
+        year: 'March 2025',
+        paragraph: `Oversaw a wide range of non-technical responsibilities essential to the success of the business. This included building and maintaining customer relationships, managing social media presence and engagement, handling bookkeeping and financial tracking, and contributing to marketing strategy and campaign planning. Gained first-hand experience with the operational, financial, and strategic challenges of launching and running a startup.`,
+        skills: ['Customer Engagement', 'Social Media', 'Bookkeeping', 'Marketing'],
+      },
+      {
+        title: 'Platform Development',
+        year: 'March 2025',
+        paragraph: `Architected and delivered the Dorado Metals Exchange platform end-to-end. Built on a Node.js/Express backend with PostgreSQL and a Next.js/TypeScript frontend. Implemented full authentication and authorization using BetterAuth, including registration, password resets, email verification, JWT-based sessions, MFA, impersonation, and RBAC access control—supporting thousands of secure user sessions. Integrated multiple third-party APIs into a unified workflow, including Stripe (PCI-compliant payments, refunds, webhooks), FedEx (labels, tracking, notifications), Google Maps (geolocation/address validation), and reCAPTCHA v3 for bot prevention. Ensured accurate real-time data handling and streamlined operations. Engineered Docker-based CI/CD pipelines with PR preview environments, automated testing, and branch-specific deployments. Integrated Sentry for real-time error monitoring, performance tracing, and automated rollback on failure—achieving 99.9% uptime.`,
+        skills: ['Node.js', 'Postgres', 'Next.js', 'TypeScript', 'Docker'],
+      },
+    ],
   },
 ]

@@ -49,8 +49,8 @@ export default function Sidebar() {
           {menuItems.map((item, idx) => {
             const offsetClass =
               idx % 2 === 0
-                ? 'rounded-r-none pr-20 bg-neutral-800'
-                : 'rounded-l-none pl-20 bg-neutral-800'
+                ? 'rounded-r-none pr-20'
+                : 'rounded-l-none pl-20'
 
             const isActive = pathname === item.href
 
@@ -65,7 +65,7 @@ export default function Sidebar() {
               >
                 {isActive && (
                   <ShineBorder
-                    shineColor={['#3F3F46', '#27272A', '#18181B']}
+                    shineColor={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
                     borderTop={2}
                     borderBottom={2}
                     borderRight={idx % 2 === 0 ? 0 : 2}
@@ -79,7 +79,7 @@ export default function Sidebar() {
                 <Link
                   href={item.href}
                   className={cn(
-                    'block text-center text-2xl tracking-wide py-3 rounded-lg raised-off-page-dark text-white',
+                    'block text-center text-2xl tracking-wide py-3 rounded-lg raised-off-page text-white bg-background',
                     offsetClass,
                     
                   )}

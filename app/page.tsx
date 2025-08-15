@@ -81,7 +81,7 @@ function Hero() {
         <div className="flex justify-center md:justify-start w-full">
           <Button
             variant="default"
-            className="relative w-full mx-14 md:mx-0 md:w-80 p-6 backdrop-blur-2xl bg-white/1 raised-off-page text-neutral-800 flex items-center gap-1 rounded-lg text-lg hover:bg-highest z-0"
+            className="relative w-full mx-14 md:mx-0 md:w-80 p-6 backdrop-blur-2xl bg-white/1 raised-off-page text-white/80 flex items-center gap-1 rounded-lg text-lg hover:bg-transparent z-0"
           >
             <ShineBorder
               shineColor={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
@@ -91,7 +91,7 @@ function Hero() {
               borderLeft={2}
               className="z-0"
             />
-            <DownloadIcon size={32} className="text-neutral-800" />
+            <DownloadIcon size={32} className="text-white/80" />
             Download CV
           </Button>
         </div>

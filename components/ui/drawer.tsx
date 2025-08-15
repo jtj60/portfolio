@@ -20,7 +20,7 @@ const Drawer: FC<Props> = ({ open, setOpen, children, anchor = 'right' }) => {
       {open && (
         <>
           <motion.div
-            className="fixed inset-0 z-50 bg-white/50 dark:bg-black/50"
+            className="fixed inset-0 z-50 bg-white/20 dark:bg-black/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
