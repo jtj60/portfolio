@@ -129,31 +129,50 @@ function ProjectItems({ node, index }: { node: TimelineNode; index: number }) {
     <div className="relative flex flex-col gap-6 md:gap-8 w-full md:pl-0">
       {node.projects?.map((project, proj_index) => (
         <div className={cn('relative flex flex-col w-full text-left')} key={proj_index}>
-          <div className="pl-20 pr-6 md:pl-8 md:pr-0">
-            <div
-              className={cn(
-                'text-xl md:text-2xl font-semibold md:font-bold pb-0 md:pb-1 tracking-wide text-neutral-600'
-              )}
-            >
-              {project.year}
-            </div>
-            <div
-              className={cn(
-                'text-lg md:text-xl font-semibold md:font-bold pb-1 md:pb-4 md:tracking-wide',
-                node.titleColor
-              )}
-            >
-              {project.title}
-            </div>
+          <div className="flex flex-col w-full mx-8 rounded-xl backdrop-blur-xs bg-white/10 raised-off-page">
+            {project.image !== null && (
+              <div className="relative w-full h-50">
+                <Image
+                  src={project.image}
+                  alt={`${node.title} logo`}
+                  fill
+                  className="object-cover z-0 rounded-t-xl w-full focus:outline-none drop-shadow-2xl"
+                />
+              </div>
+            )}
 
-            <p
-              className={cn(
-                'text-neutral-700 text-sm md:text-base whitespace-pre-line',
-                index === timelineNodes.length - 1 && ''
-              )}
-            >
-              {project.paragraph}
-            </p>
+            <div className="flex flex-col p-4">
+              <div
+                className={cn(
+                  'text-xl md:text-2xl font-semibold md:font-bold pb-0 md:pb-1 tracking-wide text-neutral-600'
+                )}
+              >
+                {project.year}
+              </div>
+              <div
+                className={cn(
+                  'text-lg md:text-xl font-semibold md:font-bold pb-1 md:pb-4 md:tracking-wide',
+                  node.titleColor
+                )}
+              >
+                {project.title}
+              </div>
+
+              <div className="flex items-center gap-1">
+                {project.skills.map((skill, index) => (
+                  <div key={index}></div>
+                ))}
+              </div>
+
+              <p
+                className={cn(
+                  'text-neutral-700 text-sm md:text-base whitespace-pre-line',
+                  index === timelineNodes.length - 1 && ''
+                )}
+              >
+                {project.paragraph}
+              </p>
+            </div>
           </div>
 
           <SmallNode />
@@ -187,6 +206,7 @@ interface TimelineNodeProject {
   year: string
   paragraph: string
   skills: string[]
+  image: string | null
 }
 
 const timelineNodes = [
@@ -206,12 +226,14 @@ const timelineNodes = [
         year: 'August 2017',
         paragraph: `My favorite course across both majors, Business Law provided a foundation that would prove surprisingly valuable years later when I launched Dorado.`,
         skills: ['C++'],
+        image: null,
       },
       {
         title: 'Finite Math',
         year: 'January 2018',
         paragraph: `An introduction to concepts I would later revisit in Discrete Math, this course was the first to truly challenge me academically: and I discovered I quite liked the challenge.`,
         skills: ['C++'],
+        image: '/logos/no_image.jpeg',
       },
     ],
   },
@@ -230,20 +252,22 @@ const timelineNodes = [
         title: 'Elo Rankings',
         year: 'June 2020',
         paragraph: `Built a simple program to generate matchup predictions based on league-wide match results, using the Elo rating formula popularized in chess. While functional, the model required a larger dataset and more meaningful inputs to improve accuracy.`,
-
         skills: ['C++'],
+        image: null,
       },
       {
         title: 'NBA Scoring Margin Predictor',
         year: 'October 2021',
         paragraph: `For my Machine Learning course's final project, I worked on predicting NBA game scoring margins. We ingested box score data from the previous season, added advanced stats, normalized the dataset, and ran various ML models. Our predictions ranged from 18-21% accuracy. We identified opportunities for improvement, such as incorporating player-level data, historical player matchups, and other deeper statistical features.`,
         skills: ['Python'],
+        image: null,
       },
       {
         title: 'Auction Draft Discord Bot',
         year: 'November 2021',
         paragraph: `My first substantial software development project. I approached the admins of an amateur DOTA 2 league and offered to build a Discord bot to run our seasonal player draft. With guidance from a mentor, I delivered a feature-complete bot in time for draft day. It included automated bidding logic, timers, fallback rules, and robust error handling, serving hundreds of league members in a live, downtime-free event.`,
         skills: ['Python'],
+        image: null,
       },
     ],
   },
@@ -264,18 +288,21 @@ const timelineNodes = [
         year: 'June 2022',
         paragraph: `Migrated the public-facing frontend from Rails to Next.js, improving site performance and user experience for over 170,000 annual visitors. This involved iterative enhancements, UI consistency improvements, and cross-browser/device compatibility fixes. I also triaged frontend bugs and resolved persistent UI inconsistencies, improving maintainability and user satisfaction.`,
         skills: ['NextJS', 'React', 'Postgres', 'Ruby on Rails'],
+        image: '/websites/sockclub.png',
       },
       {
         title: 'Logo Color Converter',
         year: 'October 2022',
         paragraph: `Developed a long-requested tool to automate logo color matching. Sock Club had 52 yarn colors, but incoming logos often contained subtle variations—sometimes 10 pixels that appeared identical were actually slightly different colors. Previously, designers manually mapped each pixel to the closest yarn color, a process that could take hours. Using ImageMagick for posterization and palette mapping, I built a tool that achieved 95% accuracy in automated conversions, drastically reducing turnaround time.`,
         skills: ['Ruby on Rails'],
+        image: null,
       },
       {
         title: 'Will-it-Knit Tool',
         year: 'November 2022',
         paragraph: `Created a tool to verify if a design template could be knitted by the factory's machines. Previously, templates that violated machine specifications were returned multiple times per week, wasting hours for both the design/operations team and the factory. Instead of encoding hundreds of rules as conditionals (as a previous, non-functional tool attempted), I simulated the knitting machine as a state machine. The tool has maintained a 100% approval accuracy—no template it approved has ever been rejected.`,
         skills: ['Ruby on Rails'],
+        image: null,
       },
     ],
   },
@@ -295,12 +322,14 @@ const timelineNodes = [
         year: 'March 2023',
         paragraph: `As part of my daily responsibilities, I supported developers across the company in identifying and resolving vulnerabilities. This involved reviewing and interpreting their code, pinpointing the root cause of security issues, and finally providing both clear and actionable guidance to help them implement secure remediations of their vulnerabilities.`,
         skills: ['VM Tooling', 'Azure'],
+        image: null,
       },
       {
         title: 'Legacy Code and Database Maintenance',
         year: 'March 2023',
         paragraph: `Our legacy codebase was extensive and often difficult to navigate. A key initiative was cleaning and refactoring this code without disrupting critical vulnerability ingestion and reporting processes. The work involved large Python and PHP codebases, as well as complex SQL scripts. Debugging could take days to trace a single issue, followed by additional time to implement and validate a fix.`,
         skills: ['Python', 'Postgres'],
+        image: null,
       },
       {
         title: 'EVMS Dashboard',
@@ -309,6 +338,7 @@ const timelineNodes = [
             
             Given the sensitivity of the data presented to users, we implemented strict security measures, adhering to the principle of least privilege. We integrated the organization's Azure Active Directory (Entra) via MSAL to provide a robust RBAC solution. Additionally, we were required to maintain near-perfect scores in vulnerability scans to set a security benchmark for the company. Upon release, teams across the organization gained access to real-time insights into their security vulnerabilities.`,
         skills: ['NodeJS', 'React', 'Docker', 'Kubernetes', 'Postgres', 'Azure'],
+        image: null,
       },
     ],
   },
@@ -328,12 +358,14 @@ const timelineNodes = [
         year: 'March 2025',
         paragraph: `Oversaw a wide range of non-technical responsibilities essential to the success of the business. This included building and maintaining customer relationships, managing social media presence and engagement, handling bookkeeping and financial tracking, and contributing to marketing strategy and campaign planning. Gained first-hand experience with the operational, financial, and strategic challenges of launching and running a startup.`,
         skills: ['Customer Engagement', 'Social Media', 'Bookkeeping', 'Marketing'],
+        image: null,
       },
       {
         title: 'Platform Development',
         year: 'March 2025',
         paragraph: `Architected and delivered the Dorado Metals Exchange platform end-to-end. Built on a Node.js/Express backend with PostgreSQL and a Next.js/TypeScript frontend. Implemented full authentication and authorization using BetterAuth, including registration, password resets, email verification, JWT-based sessions, MFA, impersonation, and RBAC access control—supporting thousands of secure user sessions. Integrated multiple third-party APIs into a unified workflow, including Stripe (PCI-compliant payments, refunds, webhooks), FedEx (labels, tracking, notifications), Google Maps (geolocation/address validation), and reCAPTCHA v3 for bot prevention. Ensured accurate real-time data handling and streamlined operations. Engineered Docker-based CI/CD pipelines with PR preview environments, automated testing, and branch-specific deployments. Integrated Sentry for real-time error monitoring, performance tracing, and automated rollback on failure—achieving 99.9% uptime.`,
         skills: ['Node.js', 'Postgres', 'Next.js', 'TypeScript', 'Docker'],
+        image: null,
       },
     ],
   },

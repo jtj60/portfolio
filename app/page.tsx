@@ -4,6 +4,8 @@ import SectionTitle from '@/components/custom/homepage/sectionTitle'
 import Skills from '@/components/custom/homepage/skills'
 import Timeline from '@/components/custom/homepage/timeline'
 import { Button } from '@/components/ui/button'
+import { GlowBorderSvg } from '@/components/ui/glowBorder'
+import { GlowRing } from '@/components/ui/glowRing'
 import SoftGradientBackground from '@/components/ui/gradient-background'
 import { ShineBorder } from '@/components/ui/shine-border'
 import { cn } from '@/lib/utils'
@@ -23,16 +25,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-5 md:gap-10 font-sans items-center justify-items-center min-h-screen max-w-7xl">
-      <SoftGradientBackground
-        intensity={isMobile ? 10 : 0.3}
-        blur={isMobile ? 50 : 120}
-        count={5}
-        speed={3}
-        colors={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
-        className="bg-transparent w-full p-4 md:p-0"
-      >
-        <Hero />
-      </SoftGradientBackground>
+      <Hero />
 
       <Skills />
       <div className="flex flex-col gap-0 w-full">
@@ -46,16 +39,30 @@ export default function Home() {
 function HeroImage() {
   return (
     <div className="flex justify-center items-center w-full">
-      <div className="relative flex rounded-full min-h-90 min-w-90 max-h-90 max-w-90 md:min-h-125 md:min-w-125 md:max-h-125 md:max-w-125 raised-off-page overflow-hidden items-center justify-center">
-        <ShineBorder
-          shineColor={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
-          borderTop={2}
-          borderBottom={2}
-          borderRight={2}
-          borderLeft={2}
-          className="z-10 rounded-full"
+      {/* OUTER sized wrapper */}
+      <div className="relative size-[360px] md:size-[500px]">
+        {/* Image inside a circular clip that fills the wrapper */}
+        <div className="absolute inset-0 rounded-full overflow-hidden z-10 p-2">
+          <Image src="/logos/portrait.jpg" alt="portrait" fill className="object-cover" />
+        </div>
+
+        {/* Glow ring OVERLAY (above the image, not clipped) */}
+        <GlowRing
+          stroke={8}
+          color="#ec4fb4"
+          glowBlend="screen"
+          glowWidthBoost={10}
+          glowSpread={10}
+          bgGlowPasses={[
+            { blur: 72, opacity: 0.38 },
+            { blur: 140, opacity: 0.22 },
+            { blur: 220, opacity: 0.1 },
+          ]}
+          onMs={10}
+          offMs={10}
+          easing="easeInOut"
+          className="z-20 -m-4"
         />
-        <Image src={'/logos/portrait.jpg'} fill className="object-cover" alt="portrait" />
       </div>
     </div>
   )
@@ -67,8 +74,10 @@ function Hero() {
       <div className="flex flex-col gap-5 md:gap-10 w-full">
         <div className="flex flex-col w-full gap-5 md:gap-10">
           <div className="flex flex-col items-start gap-1 w-full">
-            <h2 className="text-2xl md:text-3xl text-neutral-800">Hello, I'm</h2>
-            <h1 className="text-4xl md:text-6xl text-neutral-900 font-bold">Jacob Johnson</h1>
+            <h2 className="text-2xl md:text-3xl text-neutral-800 embossed-text">Hello, I'm</h2>
+            <h1 className="text-4xl md:text-6xl text-neutral-900 font-bold embossed-text">
+              Jacob Johnson
+            </h1>
           </div>
           <div className="md:hidden">
             <HeroImage />
@@ -79,17 +88,25 @@ function Hero() {
 
         <SocialLinks />
         <div className="flex justify-center md:justify-start w-full">
-          <Button
-            variant="default"
-            className="relative w-full mx-14 md:mx-0 md:w-80 p-6 backdrop-blur-2xl bg-white/1 raised-off-page text-white/80 flex items-center gap-1 rounded-lg text-lg hover:bg-transparent z-0"
-          >
-            <ShineBorder
-              shineColor={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
-              borderTop={2}
-              borderBottom={2}
-              borderRight={2}
-              borderLeft={2}
-              className="z-0"
+          <Button className="relative w-full mx-14 md:mx-0 md:w-80 p-6 bg-card text-neutral-800 raised-off-page flex items-center gap-1 rounded-lg text-lg">
+            <GlowBorderSvg
+              borderTop={3}
+              borderBottom={3}
+              borderRight={3}
+              borderLeft={3}
+              colors="#ec4fb4"
+              glowBlend="screen"
+              cap="butt"
+              highlightWidth={0.5}
+              highlightOpacity={0.4}
+              glowWidthBoost={5}
+              glowSpread={5}
+              bgGlowPasses={[
+                { blur: 72, opacity: 0.38 },
+                { blur: 140, opacity: 0.22 },
+                { blur: 220, opacity: 0.1 },
+              ]}
+              className="rounded-full"
             />
             <DownloadIcon size={32} className="text-white/80" />
             Download CV
@@ -105,16 +122,15 @@ function Hero() {
 
 function Info() {
   return (
-    <div className="flex justify-center md:justify-start items-center gap-3 mt-auto md:tracking-wide w-full p-1 md:p-0">
-      <h3 className="text-sm md:text-lg text-neutral-800 pr-3 border-r-1 border-neutral-500">
-        Dallas, TX
-      </h3>
-      <h3 className="md:hidden text-sm md:text-lg text-neutral-800 pr-3 border-r-1 border-neutral-500">
-        Software Engineer
-      </h3>
-      <h3 className="hidden md:block text-sm md:text-lg text-neutral-800 pr-3 border-r-1 border-neutral-500">
+    <div className="flex justify-center md:justify-start items-center gap-3 mt-auto md:tracking-wide w-full p-1 md:p-0 embossed-text">
+      <h3 className="text-sm md:text-lg text-neutral-800">Dallas, TX</h3>
+      <div className="h-9 w-[2px] bg-neutral-600 raised-off-page rounded-full" />
+      <h3 className="md:hidden text-sm md:text-lg text-neutral-800">Software Engineer</h3>
+      <h3 className="hidden md:block text-sm md:text-lg text-neutral-800">
         Full-Stack Software Engineer
       </h3>
+      <div className="h-9 w-[2px] bg-neutral-600 raised-off-page rounded-lg" />
+
       <h3 className="md:hidden text-sm md:text-lg text-neutral-800">Texas State</h3>
       <h3 className="hidden md:block text-sm md:text-lg text-neutral-800">
         Texas State University

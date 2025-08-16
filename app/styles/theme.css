@@ -192,6 +192,42 @@
   --radius: 0.35rem;
 }
 
+
+
+.background-fiber {
+  background: radial-gradient(black 15%, transparent 16%) 0 0,
+    radial-gradient(black 15%, transparent 16%) 8px 8px,
+    radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 8px 9px;
+  background-color: #282828;
+  background-size: 16px 16px;
+}
+
+.embossed-text {
+  color: #f2f2f2; /* slightly off-white so the highlight reads */
+  letter-spacing: 0.01em;
+  text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.35),
+    /* bevel highlight */ 1px 1px 0 rgba(0, 0, 0, 0.55),
+    /* bevel shadow */ 2px 3px 8px rgba(0, 0, 0, 0.55); /* soft lift */
+}
+
+.engraved-text {
+  position: relative;
+  display: inline-block;
+  color: transparent;                /* text fill comes from background */
+  background: #f2f2f2;                /* base fill color */
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Inset bevel effect */
+  box-shadow:
+    inset 2px 2px 4px rgba(0, 0, 0, 0.5),   /* top-left inner shadow */
+    inset -2px -2px 4px rgba(255, 255, 255, 0.6); /* bottom-right highlight */
+
+  /* This makes the box-shadow apply to the text shapes, not the whole box */
+  -webkit-text-fill-color: transparent;
+}
+
 .text-primary-gradient {
   background: linear-gradient(
     to left,

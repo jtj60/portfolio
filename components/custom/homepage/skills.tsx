@@ -62,7 +62,7 @@ export default function Skills() {
             />
             <ImageChip
               src="/logos/rails.svg"
-              label="Ruby on Rails"
+              label="Rails"
               className="bg-linear-to-br from-red-400 to-red-700"
             />
           </div>
@@ -111,8 +111,13 @@ export default function Skills() {
 
 function ImageChip({ src, label, className }: { src: string; label: string; className?: string }) {
   return (
-    <div className="flex w-full items-center">
-      <div className="relative flex rounded-full h-12 w-12 overflow-hidden bg-white raised-off-page-dark justify-center items-center">
+    <div className="flex w-full items-center gap-6 rounded-md bg-background raised-off-page py-2 px-4 min-w-40">
+      <div className="relative w-full">
+        <Image src={src} height={30} width={30} className="" alt="logo.png" />
+      </div>
+      <div className="text-neutral-800 text-base tracking-wide font-semibold w-full text-center">{label}</div>
+
+      {/* <div className="relative flex rounded-full h-12 w-12 overflow-hidden bg-white raised-off-page-dark justify-center items-center">
         <Image src={src} height={30} width={30} className="" alt="logo.png" />
       </div>
       <div
@@ -122,7 +127,7 @@ function ImageChip({ src, label, className }: { src: string; label: string; clas
         )}
       >
         <div className="text-white text-base tracking-wide font-semibold pl-8">{label}</div>
-      </div>
+      </div> */}
     </div>
   )
 }

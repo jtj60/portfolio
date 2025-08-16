@@ -15,6 +15,7 @@ import { protectedRoutes } from '@/types/routes'
 import { cn } from '@/lib/utils'
 import { Logo } from '@/components/icons/logo'
 import { ShineBorder } from '@/components/ui/shine-border'
+import { LightsToggle } from './lightsToggle'
 
 export default function Shell() {
   const pathname = usePathname()
@@ -68,6 +69,7 @@ export default function Shell() {
               </nav>
             </div>
           </div>
+          <LightsToggle />
         </div>
       </div>
 
