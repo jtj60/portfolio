@@ -4,7 +4,6 @@ import SectionTitle from '@/components/custom/homepage/sectionTitle'
 import Skills from '@/components/custom/homepage/skills'
 import Timeline from '@/components/custom/homepage/timeline'
 import { Button } from '@/components/ui/button'
-import { GlowBorderSvg } from '@/components/ui/glowBorder'
 import { GlowRing } from '@/components/ui/glowRing'
 import SoftGradientBackground from '@/components/ui/gradient-background'
 import { ShineBorder } from '@/components/ui/shine-border'
@@ -46,7 +45,6 @@ function HeroImage() {
           <Image src="/logos/portrait.jpg" alt="portrait" fill className="object-cover" />
         </div>
 
-        {/* Glow ring OVERLAY (above the image, not clipped) */}
         <GlowRing
           stroke={8}
           color="#ec4fb4"
@@ -89,25 +87,6 @@ function Hero() {
         <SocialLinks />
         <div className="flex justify-center md:justify-start w-full">
           <Button className="relative w-full mx-14 md:mx-0 md:w-80 p-6 bg-card text-neutral-800 raised-off-page flex items-center gap-1 rounded-lg text-lg">
-            <GlowBorderSvg
-              borderTop={3}
-              borderBottom={3}
-              borderRight={3}
-              borderLeft={3}
-              colors="#ec4fb4"
-              glowBlend="screen"
-              cap="butt"
-              highlightWidth={0.5}
-              highlightOpacity={0.4}
-              glowWidthBoost={5}
-              glowSpread={5}
-              bgGlowPasses={[
-                { blur: 72, opacity: 0.38 },
-                { blur: 140, opacity: 0.22 },
-                { blur: 220, opacity: 0.1 },
-              ]}
-              className="rounded-full"
-            />
             <DownloadIcon size={32} className="text-white/80" />
             Download CV
           </Button>

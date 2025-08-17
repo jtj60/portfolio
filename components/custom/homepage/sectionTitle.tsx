@@ -1,4 +1,4 @@
-import { GlowBorderSvg } from '@/components/ui/glowBorder'
+import { GlowTubeLine } from '@/components/ui/glowBorder'
 import { ShineBorder } from '@/components/ui/shine-border'
 import { cn } from '@/lib/utils'
 
@@ -11,14 +11,12 @@ export default function SectionTitle({ title, className }: { title: string; clas
         </h3>
       </div>
       <div className="relative flex flex-col w-full mb-5 md:mb-10">
-        <GlowBorderSvg
-          borderTop={0}
-          borderBottom={3}
-          colors="#ec4fb4"
+        <GlowTubeLine
+          className="z-10"
+          orientation="horizontal"
+          stroke={8}
+          color="#ec4fb4"
           glowBlend="screen"
-          cap="round"
-          highlightWidth={0.5}
-          highlightOpacity={0.4}
           glowWidthBoost={10}
           glowSpread={10}
           bgGlowPasses={[
@@ -26,7 +24,9 @@ export default function SectionTitle({ title, className }: { title: string; clas
             { blur: 140, opacity: 0.22 },
             { blur: 220, opacity: 0.1 },
           ]}
-          className="rounded-full"
+          onMs={10}
+          offMs={10}
+          easing="easeInOut"
         />
       </div>
     </>
