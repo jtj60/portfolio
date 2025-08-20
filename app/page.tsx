@@ -4,10 +4,9 @@ import SectionTitle from '@/components/custom/homepage/sectionTitle'
 import Skills from '@/components/custom/homepage/skills'
 import Timeline from '@/components/custom/homepage/timeline'
 import { Button } from '@/components/ui/button'
-import { GlowRing } from '@/components/ui/glowRing'
-import SoftGradientBackground from '@/components/ui/gradient-background'
-import { ShineBorder } from '@/components/ui/shine-border'
-import { cn } from '@/lib/utils'
+import { GlassMountCard } from '@/components/ui/glass-mount'
+import { NeonLight } from '@/components/ui/neon-lights'
+import { useLightsStore } from '@/store/lightsStore'
 import { useIsMobile } from '@/utils/isMobile'
 import {
   DownloadIcon,
@@ -20,8 +19,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Home() {
-  const isMobile = useIsMobile()
-
   return (
     <div className="flex flex-col gap-5 md:gap-10 font-sans items-center justify-items-center min-h-screen max-w-7xl">
       <Hero />
@@ -36,16 +33,31 @@ export default function Home() {
 }
 
 function HeroImage() {
+  const { lightsOn } = useLightsStore()
+
   return (
     <div className="flex justify-center items-center w-full">
-      {/* OUTER sized wrapper */}
       <div className="relative size-[360px] md:size-[500px]">
-        {/* Image inside a circular clip that fills the wrapper */}
-        <div className="absolute inset-0 rounded-full overflow-hidden z-10 p-2">
-          <Image src="/logos/portrait.jpg" alt="portrait" fill className="object-cover" />
-        </div>
+        <GlassMountCard
+          className="w-full h-full relative rounded-full z-10"
+          shape="circle"
+          steelTheme="dark"
+          blur={3}
+          brightness={1.1}
+          elevation={0.6}
+          circleCount={6}
+          circleStartDeg={60}
+          circleInset={10}
+          mountRadius={5}
+          showRim={true}
+        >
+          <div className="absolute inset-0 rounded-full z-0 overflow-hidden">
+            <Image src="/portraits/embossed.png" alt="portrait" fill className="object-cover z-0" />
+          </div>
+        </GlassMountCard>
 
-        <GlowRing
+        <NeonLight
+          lightsOn={lightsOn}
           stroke={8}
           color="#ec4fb4"
           glowBlend="screen"
@@ -69,20 +81,30 @@ function HeroImage() {
 function Hero() {
   return (
     <div className="flex items-center justify-between w-full h-full max-w-7xl md:mt-15">
-      <div className="flex flex-col gap-5 md:gap-10 w-full">
-        <div className="flex flex-col w-full gap-5 md:gap-10">
-          <div className="flex flex-col items-start gap-1 w-full">
-            <h2 className="text-2xl md:text-3xl text-neutral-800 embossed-text">Hello, I'm</h2>
-            <h1 className="text-4xl md:text-6xl text-neutral-900 font-bold embossed-text">
-              Jacob Johnson
-            </h1>
-          </div>
-          <div className="md:hidden">
-            <HeroImage />
-          </div>
+      <div className="flex flex-col gap-5 md:gap-15 w-full">
+        <GlassMountCard
+          className="rounded-xl h-full p-8 mr-auto"
+          rectMode="corners"
+          cornerInset={14}
+          steelTheme="dark"
+          blur={3}
+          elevation={0.2}
+          brightness={1.1}
+          mountRadius={5}
+          showRim={true}
+        >
+          <div className="flex flex-col w-full gap-5 md:gap-10">
+            <div className="flex flex-col items-start gap-1 w-full">
+              <h2 className="text-2xl md:text-3xl text-neutral-800">Hello, I'm</h2>
+              <h1 className="text-4xl md:text-6xl text-neutral-900 font-bold">Jacob Johnson</h1>
+            </div>
+            <div className="md:hidden">
+              <HeroImage />
+            </div>
 
-          <Info />
-        </div>
+            <Info />
+          </div>
+        </GlassMountCard>
 
         <SocialLinks />
         <div className="flex justify-center md:justify-start w-full">
@@ -101,17 +123,17 @@ function Hero() {
 
 function Info() {
   return (
-    <div className="flex justify-center md:justify-start items-center gap-3 mt-auto md:tracking-wide w-full p-1 md:p-0 embossed-text">
-      <h3 className="text-sm md:text-lg text-neutral-800">Dallas, TX</h3>
-      <div className="h-9 w-[2px] bg-neutral-600 raised-off-page rounded-full" />
-      <h3 className="md:hidden text-sm md:text-lg text-neutral-800">Software Engineer</h3>
+    <div className="flex justify-center md:justify-start items-center gap-3 mt-auto md:tracking-wide w-full p-1 md:p-0 pt-10">
+      <h3 className="text-sm md:text-lg text-neutral-700">Dallas, TX</h3>
+      <div className="h-9 w-[2px] bg-neutral-400 raised-off-page rounded-full" />
+      <h3 className="md:hidden text-sm md:text-lg text-neutral-700">Software Engineer</h3>
       <h3 className="hidden md:block text-sm md:text-lg text-neutral-800">
         Full-Stack Software Engineer
       </h3>
-      <div className="h-9 w-[2px] bg-neutral-600 raised-off-page rounded-lg" />
+      <div className="h-9 w-[2px] bg-neutral-400 raised-off-page rounded-lg" />
 
-      <h3 className="md:hidden text-sm md:text-lg text-neutral-800">Texas State</h3>
-      <h3 className="hidden md:block text-sm md:text-lg text-neutral-800">
+      <h3 className="md:hidden text-sm md:text-lg text-neutral-700">Texas State</h3>
+      <h3 className="hidden md:block text-sm md:text-lg text-neutral-700">
         Texas State University
       </h3>
     </div>

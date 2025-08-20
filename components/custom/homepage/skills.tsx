@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import SectionTitle from './sectionTitle'
 import { cn } from '@/lib/utils'
+import { GlassMountCard } from '@/components/ui/glass-mount'
 
 export default function Skills() {
   return (
@@ -111,23 +112,21 @@ export default function Skills() {
 
 function ImageChip({ src, label, className }: { src: string; label: string; className?: string }) {
   return (
-    <div className="flex w-full items-center gap-6 rounded-md bg-background raised-off-page py-2 px-4 min-w-40">
-      <div className="relative w-full">
-        <Image src={src} height={30} width={30} className="" alt="logo.png" />
+    <GlassMountCard
+      className="pt-3 pb-2 px-3 min-w-32"
+      rectMode="corners"
+      cornerInset={10}
+      steelTheme="dark"
+      blur={3}
+      elevation={0.2}
+      brightness={1.1}
+      mountRadius={2}
+      showRim={true}
+    >
+      <div className="relative flex flex-col gap-2 items-center justify-between w-full h-full">
+        <Image src={src} height={45} width={45} className="" alt="logo.png" />
+        <div className="text-neutral-700 text-sm tracking-wide font-semibold">{label}</div>
       </div>
-      <div className="text-neutral-800 text-base tracking-wide font-semibold w-full text-center">{label}</div>
-
-      {/* <div className="relative flex rounded-full h-12 w-12 overflow-hidden bg-white raised-off-page-dark justify-center items-center">
-        <Image src={src} height={30} width={30} className="" alt="logo.png" />
-      </div>
-      <div
-        className={cn(
-          'flex rounded-2xl justify-center items-center bg-neutral-700 raised-off-page h-12 w-44 -ml-10',
-          className
-        )}
-      >
-        <div className="text-white text-base tracking-wide font-semibold pl-8">{label}</div>
-      </div> */}
-    </div>
+    </GlassMountCard>
   )
 }

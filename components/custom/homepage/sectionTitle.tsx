@@ -1,8 +1,8 @@
-import { GlowTubeLine } from '@/components/ui/glowBorder'
-import { ShineBorder } from '@/components/ui/shine-border'
-import { cn } from '@/lib/utils'
+import { NeonLight } from '@/components/ui/neon-lights'
+import { useLightsStore } from '@/store/lightsStore'
 
 export default function SectionTitle({ title, className }: { title: string; className?: string }) {
+  const { lightsOn } = useLightsStore()
   return (
     <>
       <div className="flex items-center justify-start w-full max-w-7xl">
@@ -11,8 +11,9 @@ export default function SectionTitle({ title, className }: { title: string; clas
         </h3>
       </div>
       <div className="relative flex flex-col w-full mb-5 md:mb-10">
-        <GlowTubeLine
-          className="z-10"
+        <NeonLight
+          lightsOn={lightsOn}
+          className="z-10 absolute"
           orientation="horizontal"
           stroke={8}
           color="#ec4fb4"
@@ -27,6 +28,9 @@ export default function SectionTitle({ title, className }: { title: string; clas
           onMs={10}
           offMs={10}
           easing="easeInOut"
+          mountLinePadStart={30}
+          mountLinePadEnd={30}
+          mountCount={4}
         />
       </div>
     </>

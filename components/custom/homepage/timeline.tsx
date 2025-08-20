@@ -3,23 +3,38 @@ import Image from 'next/image'
 import SectionTitle from './sectionTitle'
 import { cn } from '@/lib/utils'
 import { title } from 'process'
+import { NeonLight } from '@/components/ui/neon-lights'
+import { useLightsStore } from '@/store/lightsStore'
+import { GlassMountCard } from '@/components/ui/glass-mount'
 
 export default function Timeline() {
+  const { lightsOn } = useLightsStore()
   return (
     <div className="flex flex-col w-full justify-center items-center">
       <SectionTitle title="Career Timeline" />
 
-      <div className="hidden relative md:block w-full max-w-7xl mx-auto">
-        <div className="absolute left-1/2 right-1/2 -translate-x-1/2 top-0 bottom-0 pointer-events-none">
-          <ShineBorder
-            shineColor={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
-            borderTop={2}
-            borderBottom={2}
-            borderRight={2}
-            borderLeft={2}
-            className="z-0 h-full w-0"
-          />
-        </div>
+      <div className="hidden relative md:block w-full max-w-7xl mx-auto h-full">
+        <NeonLight
+          lightsOn={lightsOn}
+          className="z-10 pl-1"
+          orientation="vertical"
+          stroke={8}
+          color="#ec4fb4"
+          glowBlend="screen"
+          glowWidthBoost={10}
+          glowSpread={10}
+          bgGlowPasses={[
+            { blur: 72, opacity: 0.38 },
+            { blur: 140, opacity: 0.22 },
+            { blur: 220, opacity: 0.1 },
+          ]}
+          onMs={10}
+          offMs={10}
+          mountCount={12}
+          easing="easeInOut"
+          mountLinePadStart={120}
+          mountLinePadEnd={120}
+        />
         <div className="flex flex-col gap-12">
           {timelineNodes.map((node, index) => (
             <div
@@ -40,17 +55,27 @@ export default function Timeline() {
         </div>
       </div>
 
-      <div className="md:hidden relative w-full max-w-7xl mx-auto">
-        <div className="absolute left-8 top-0 bottom-0 pointer-events-none">
-          <ShineBorder
-            shineColor={['#5a75ff', '#f176c5', '#425fff', '#ec4fb4']}
-            borderTop={2}
-            borderBottom={2}
-            borderRight={2}
-            borderLeft={2}
-            className="z-0 h-full w-0"
-          />
-        </div>
+      <div className="md:hidden relative w-full max-w-7xl mx-auto my-10 md:my-0">
+        <NeonLight
+          lightsOn={lightsOn}
+          className="z-10 -left-full pl-17"
+          orientation="vertical"
+          stroke={8}
+          color="#ec4fb4"
+          glowBlend="screen"
+          glowWidthBoost={10}
+          glowSpread={10}
+          bgGlowPasses={[
+            { blur: 72, opacity: 0.38 },
+            { blur: 140, opacity: 0.22 },
+            { blur: 220, opacity: 0.1 },
+          ]}
+          onMs={10}
+          offMs={10}
+          easing="easeInOut"
+          mountLinePadStart={80}
+          mountLinePadEnd={80}
+        />
         <div className="flex flex-col gap-6 md:gap-12">
           {timelineNodes.map((node, index) => (
             <div
@@ -74,23 +99,105 @@ export default function Timeline() {
 
 function ParagraphItem({ node, index }: { node: TimelineNode; index: number }) {
   return (
-    <div className={cn('relative w-full pl-20 pr-6 md:pl-0 md:pr-20 pb-6 md:pb-0')}>
-      <div className={cn('text-left md:text-right w-full')}>
-        <div className="text-3xl md:text-6xl text-neutral-900 mt-1 md:mt-0 md:pb-1 font-bold">
-          {node.year}
+    <div className={cn('relative w-full pl-20 pr-6 md:pl-0 md:pr-10 pb-6 md:pb-0')}>
+      <GlassMountCard
+        className="w-full max-w-xl rounded-xl p-6"
+        rectMode="corners"
+        cornerInset={14}
+        steelTheme="dark"
+        blur={3}
+        elevation={0.2}
+        brightness={1.1}
+        mountRadius={5}
+        showRim={true}
+      >
+        <div className={cn('text-left w-full')}>
+          <div className="text-3xl md:text-4xl text-neutral-900 mt-1 md:mt-0 md:pb-1 font-bold">
+            {node.year}
+          </div>
+          <div
+            className={cn(
+              'text-2xl md:text-2xl font-bold pb-2 md:pb-4 md:tracking-wide',
+              node.titleColor
+            )}
+          >
+            {node.title}
+          </div>
+          <p className={cn('text-neutral-700 text-sm md:text-base whitespace-pre-line')}>
+            {node.paragraph}
+          </p>
         </div>
-        <div
-          className={cn(
-            'text-2xl md:text-4xl font-bold pb-2 md:pb-4 md:tracking-wide',
-            node.titleColor
-          )}
-        >
-          {node.title}
+      </GlassMountCard>
+    </div>
+  )
+}
+
+function ProjectItems({ node, index }: { node: TimelineNode; index: number }) {
+  return (
+    <div className="relative flex flex-col w-full pb-6 md:pb-0 gap-6 md:gap-8">
+      {node.projects?.map((project, proj_index) => (
+        <div className={cn('relative flex flex-col w-full text-left')} key={proj_index}>
+          <div className="pl-20 md:pl-10 pr-6 md:pr-0 w-full">
+            <GlassMountCard
+              className="w-full rounded-xl p-6"
+              rectMode="corners"
+              cornerInset={14}
+              steelTheme="dark"
+              blur={3}
+              elevation={0.2}
+              brightness={1.1}
+              mountRadius={5}
+              showRim={true}
+            >
+              <div className="flex flex-col w-full">
+                {project.image !== null && (
+                  <div className="relative w-full h-50">
+                    <Image
+                      src={project.image}
+                      alt={`${node.title} logo`}
+                      fill
+                      className="object-cover z-0 rounded-t-xl w-full focus:outline-none drop-shadow-2xl"
+                    />
+                  </div>
+                )}
+
+                <div className="flex flex-col p-4 w-full">
+                  <div
+                    className={cn(
+                      'text-xl md:text-2xl font-semibold md:font-bold pb-0 md:pb-1 tracking-wide text-neutral-600'
+                    )}
+                  >
+                    {project.year}
+                  </div>
+                  <div
+                    className={cn(
+                      'text-lg md:text-xl font-semibold md:font-bold pb-1 md:pb-4 md:tracking-wide',
+                      node.titleColor
+                    )}
+                  >
+                    {project.title}
+                  </div>
+
+                  <div className="flex items-center gap-1">
+                    {project.skills.map((skill, index) => (
+                      <div key={index}></div>
+                    ))}
+                  </div>
+
+                  <p
+                    className={cn(
+                      'text-neutral-700 text-sm md:text-base whitespace-pre-line',
+                      index === timelineNodes.length - 1 && ''
+                    )}
+                  >
+                    {project.paragraph}
+                  </p>
+                </div>
+              </div>
+            </GlassMountCard>
+          </div>
         </div>
-        <p className={cn('text-neutral-700 text-sm md:text-base whitespace-pre-line')}>
-          {node.paragraph}
-        </p>
-      </div>
+      ))}
     </div>
   )
 }
@@ -102,82 +209,37 @@ function BigNode({ node, position }: { node: TimelineNode; position: string }) {
         'absolute left-1.5 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 z-20 justify-self-center h-full pl-1'
       )}
     >
-      <div className="hidden md:flex relative h-16 w-16 rounded-full backdrop-blur-xs bg-white/10 flex items-center justify-center raised-off-page">
-        <Image
-          src={node.imageUrl}
-          alt={`${node.title} logo`}
-          width={node.size}
-          height={node.size}
-          className="object-contain z-0"
-        />
-      </div>
-      <div className="relative md:hidden h-12 w-12 rounded-full backdrop-blur-xs bg-white/10 flex items-center justify-center raised-off-page">
-        <Image
-          src={node.imageUrl}
-          alt={`${node.title} logo`}
-          width={node.mobileSize}
-          height={node.mobileSize}
-          className="object-contain z-0"
-        />
-      </div>
-    </div>
-  )
-}
-
-function ProjectItems({ node, index }: { node: TimelineNode; index: number }) {
-  return (
-    <div className="relative flex flex-col gap-6 md:gap-8 w-full md:pl-0">
-      {node.projects?.map((project, proj_index) => (
-        <div className={cn('relative flex flex-col w-full text-left')} key={proj_index}>
-          <div className="flex flex-col w-full mx-8 rounded-xl backdrop-blur-xs bg-white/10 raised-off-page">
-            {project.image !== null && (
-              <div className="relative w-full h-50">
-                <Image
-                  src={project.image}
-                  alt={`${node.title} logo`}
-                  fill
-                  className="object-cover z-0 rounded-t-xl w-full focus:outline-none drop-shadow-2xl"
-                />
-              </div>
-            )}
-
-            <div className="flex flex-col p-4">
-              <div
-                className={cn(
-                  'text-xl md:text-2xl font-semibold md:font-bold pb-0 md:pb-1 tracking-wide text-neutral-600'
-                )}
-              >
-                {project.year}
-              </div>
-              <div
-                className={cn(
-                  'text-lg md:text-xl font-semibold md:font-bold pb-1 md:pb-4 md:tracking-wide',
-                  node.titleColor
-                )}
-              >
-                {project.title}
-              </div>
-
-              <div className="flex items-center gap-1">
-                {project.skills.map((skill, index) => (
-                  <div key={index}></div>
-                ))}
-              </div>
-
-              <p
-                className={cn(
-                  'text-neutral-700 text-sm md:text-base whitespace-pre-line',
-                  index === timelineNodes.length - 1 && ''
-                )}
-              >
-                {project.paragraph}
-              </p>
-            </div>
-          </div>
-
-          <SmallNode />
+      <GlassMountCard
+        className="w-full max-w-xl rounded-full p-2 h-18 w-18 flex items-center justify-center"
+        shape="circle"
+        steelTheme="dark"
+        blur={3}
+        brightness={1.1}
+        elevation={0.2}
+        circleCount={4}
+        circleStartDeg={45}
+        mountRadius={2}
+        showRim={true}
+      >
+        <div className="hidden relative md:flex h-full items-center justify-center">
+          <Image
+            src={node.imageUrl}
+            alt={`${node.title} logo`}
+            width={node.size}
+            height={node.size}
+            className="object-contain z-0"
+          />
         </div>
-      ))}
+        <div className="md:hidden relative flex h-full items-center justify-center">
+          <Image
+            src={node.imageUrl}
+            alt={`${node.title} logo`}
+            width={node.mobileSize}
+            height={node.mobileSize}
+            className="object-contain z-0"
+          />
+        </div>
+      </GlassMountCard>
     </div>
   )
 }
@@ -245,7 +307,7 @@ const timelineNodes = [
     borderColor: 'border-amber-900',
     paragraphBorder: 'border-amber-900',
     titleColor: 'text-amber-900',
-    size: 45,
+    size: 40,
     mobileSize: 35,
     projects: [
       {
