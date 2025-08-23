@@ -8,7 +8,7 @@ import { useLightsStore } from '@/store/lightsStore'
 import { GlassMountCard } from '@/components/ui/glass-mount'
 
 export default function Timeline() {
-  const { lightsOn } = useLightsStore()
+  const { lightsOn, light } = useLightsStore()
   return (
     <div className="flex flex-col w-full justify-center items-center">
       <SectionTitle title="Career Timeline" />
@@ -19,7 +19,7 @@ export default function Timeline() {
           className="z-10 pl-1"
           orientation="vertical"
           stroke={8}
-          color="#ec4fb4"
+          color={light.hex}
           glowBlend="screen"
           glowWidthBoost={10}
           glowSpread={10}
@@ -61,7 +61,7 @@ export default function Timeline() {
           className="z-10 -left-full pl-17"
           orientation="vertical"
           stroke={8}
-          color="#ec4fb4"
+          color={light.hex}
           glowBlend="screen"
           glowWidthBoost={10}
           glowSpread={10}

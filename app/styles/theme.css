@@ -108,7 +108,7 @@
   --muted: hsl(240, 5%, 100%);
   --input: hsl(240, 6%, 95%);
   --border: hsl(240, 5%, 88%);
-  --popover: hsl(240, 5%, 75%);
+  --popover: hsl(240, 5%, 35%);
   --background: hsl(240, 5%, 15%);
   --card: hsl(240, 4%, 5%);
   --highest: hsl(240, 6%, 0%);

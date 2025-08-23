@@ -5,6 +5,7 @@
 @import './base.css';
 @import './components.css';
 @import './drawer.css';
+@import './panel.css';
 
 .swiper-container{
   height: 100%; 

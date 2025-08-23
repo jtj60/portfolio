@@ -3,7 +3,6 @@ import { Montserrat, Open_Sans } from 'next/font/google'
 import './styles/globals.css'
 import LayoutProvider from '@/components/providers/LayoutProvider' // ✅ Import the Client Component
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
-import { LightsBridge } from '@/store/lightsStore'
 
 export const montserrat = Montserrat({
   subsets: ['latin'],
@@ -31,7 +30,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="bg-background antialiased">
         <ThemeProvider attribute="class" defaultTheme="light">
           <LayoutProvider>
-            <LightsBridge />
             {children}
           </LayoutProvider>
         </ThemeProvider>

@@ -161,6 +161,7 @@ function makeGeom(orientation: NeonLightOrientation, w: number, h: number, strok
 // ======================================================
 // Defs (filters/gradients/masks) — shape-aware
 // ======================================================
+/*** REPLACE YOUR Defs WITH THIS VERSION (unchanged API) ***/
 function Defs({
   uid,
   geom,
@@ -172,10 +173,8 @@ function Defs({
   coreMargin,
   offShadowBlur,
   offGlassAlpha,
-
   mountSteelTheme,
-}: // line-only glass gradient helpers
-{
+}: {
   uid: string
   geom: Geom
   stroke: number
@@ -190,12 +189,17 @@ function Defs({
 }) {
   const isCircle = geom.kind === 'circle'
 
+  // put these near the existing `steel` const
+  const hardware =
+    mountSteelTheme === 'dark'
+      ? { hi: '#b1b8bf', mid: '#6f757c', lo: '#2f353b', xlo: '#181c20' }
+      : { hi: '#c9ced3', mid: '#8a9097', lo: '#3f454c', xlo: '#20252b' }
+
   const steel =
     mountSteelTheme === 'dark'
       ? { hi: '#b8c0c7', mid: '#80878e', lo: '#3d4349' }
       : { hi: '#d7dce1', mid: '#9aa1a8', lo: '#5a6168' }
 
-  // ——— glow filter bounds
   const glowFilters = bgGlowPasses.map((p, i) => {
     const margin = Q(p.blur * 4 + glowSpread * 2 + 8)
     if (isCircle) {
@@ -257,7 +261,6 @@ function Defs({
     }
   })
 
-  // ——— core bloom bounds
   const coreBloomFilter = (() => {
     if (isCircle) {
       const { cx, cy, r } = geom
@@ -297,7 +300,6 @@ function Defs({
     )
   })()
 
-  // ——— off shadow bounds
   const offShadowFilter = (() => {
     if (isCircle) {
       const { cx, cy, r } = geom
@@ -330,11 +332,9 @@ function Defs({
     )
   })()
 
-  // ——— masks & glass paints
   const maskAndGlass = (() => {
     if (isCircle) {
       const g = geom
-      // mask confines fills to the tube thickness
       const gradOuterR = Q(g.r + stroke / 2)
       const innerEdgeT = gradOuterR > 0 ? Math.max(0, (g.r - stroke / 2) / gradOuterR) : 0.8
       const innerEdgePct = `${(innerEdgeT * 100).toFixed(3)}%`
@@ -424,7 +424,6 @@ function Defs({
         <feGaussianBlur stdDeviation="0.35" />
       </filter>
 
-      {/* micro-grain for OFF glass */}
       <filter id={`${uid}_grain`} x="0" y="0" width="100%" height="100%">
         <feTurbulence
           type="fractalNoise"
@@ -441,8 +440,7 @@ function Defs({
 
       {maskAndGlass}
 
-      {/* Mounts paints/filters (used only if circle) */}
-
+      {/* --- hardware paints --- */}
       <linearGradient id={`${uid}_boltSteel`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stopColor="#c4c9cf" />
         <stop offset="0.5" stopColor="#8a9097" />
@@ -450,13 +448,12 @@ function Defs({
       </linearGradient>
 
       <radialGradient id={`${uid}_washerSteel`} cx="50%" cy="50%" r="65%">
-        <stop offset="0" stopColor="#c7ccd2" />
-        <stop offset="0.6" stopColor="#8c9299" />
-        <stop offset="0.82" stopColor="#5f656c" />
-        <stop offset="1" stopColor="#2f3439" />
+        <stop offset="0" stopColor={steel.hi} />
+        <stop offset="0.60" stopColor={steel.mid} />
+        <stop offset="0.85" stopColor={steel.lo} />
+        <stop offset="1" stopColor={steel.lo} />
       </radialGradient>
 
-      {/* --- GlassMountCard-style hardware defs --- */}
       <linearGradient
         id={`${uid}_faceAxial`}
         x1="0"
@@ -471,52 +468,56 @@ function Defs({
         <stop offset="1" stopColor={steel.lo} />
       </linearGradient>
 
-      {/* bevel/darken toward edge */}
       <radialGradient id={`${uid}_edgeVignette`} cx="50%" cy="50%" r="60%">
         <stop offset="65%" stopColor="#000" stopOpacity="0" />
         <stop offset="100%" stopColor="#000" stopOpacity="0.22" />
       </radialGradient>
 
-      {/* subtle rim glint */}
       <linearGradient id={`${uid}_glint`} x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#fff" stopOpacity="0" />
         <stop offset="0.5" stopColor="#fff" stopOpacity="0.65" />
         <stop offset="1" stopColor="#fff" stopOpacity="0" />
       </linearGradient>
 
-      {/* contact AO & slight elevation shadow (unchanged) */}
+      {/* grounding & light elevation */}
       <filter id={`${uid}_contactAO`} x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="1.2" result="b" />
-        <feOffset dx="0" dy="0.6" />
-        <feComponentTransfer>
+        <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="b" />
+        <feOffset in="b" dx="0" dy="0.6" result="o" />
+        <feComponentTransfer in="o" result="ao">
           <feFuncA type="linear" slope="0.45" />
         </feComponentTransfer>
-      </filter>
-      <filter id={`${uid}_elev`} x="-70%" y="-70%" width="240%" height="240%">
-        <feDropShadow
-          dx="0"
-          dy="1.0"
-          stdDeviation="1.2"
-          floodColor="rgb(0 0 0)"
-          floodOpacity="0.32"
-        />
-        <feDropShadow
-          dx="0"
-          dy="3.6"
-          stdDeviation="2.8"
-          floodColor="rgb(0 0 0)"
-          floodOpacity="0.18"
-        />
+        <feMerge>
+          <feMergeNode in="ao" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
       </filter>
 
-      {/* NEW: washer steel uses the same palette */}
-      <radialGradient id={`${uid}_washerSteel`} cx="50%" cy="50%" r="65%">
-        <stop offset="0" stopColor={steel.hi} />
-        <stop offset="0.60" stopColor={steel.mid} />
-        <stop offset="0.85" stopColor={steel.lo} />
-        <stop offset="1" stopColor={steel.lo} />
-      </radialGradient>
+      <filter
+        id={`${uid}_elev`}
+        x="-70%"
+        y="-70%"
+        width="240%"
+        height="240%"
+        colorInterpolationFilters="sRGB"
+      >
+        <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="b1" />
+        <feOffset in="b1" dx="0" dy="1.0" result="o1" />
+        <feFlood floodColor="rgb(0 0 0)" floodOpacity="0.82" result="c1" />
+        <feComposite in="c1" in2="o1" operator="in" result="s1" />
 
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2.8" result="b2" />
+        <feOffset in="b2" dx="0" dy="3.6" result="o2" />
+        <feFlood floodColor="rgb(0 0 0)" floodOpacity="0.18" result="c2" />
+        <feComposite in="c2" in2="o2" operator="in" result="s2" />
+
+        <feMerge>
+          <feMergeNode in="s1" />
+          <feMergeNode in="s2" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+
+      {/* strap paints */}
       <linearGradient id={`${uid}_bandCross`} x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#000" stopOpacity="0.60" />
         <stop offset="0.15" stopColor="#000" stopOpacity="0.25" />
@@ -525,7 +526,7 @@ function Defs({
         <stop offset="1" stopColor="#000" stopOpacity="0.60" />
       </linearGradient>
 
-      {/* darken tube just OUTSIDE the strap (top/bottom edges in the strap’s local coords) */}
+      {/* tube darkening at strap edges */}
       <linearGradient id={`${uid}_underEdge`} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stopColor="#000" stopOpacity="0" />
         <stop offset="1" stopColor="#000" stopOpacity="0.55" />
@@ -535,7 +536,6 @@ function Defs({
         <stop offset="1" stopColor="#000" stopOpacity="0" />
       </linearGradient>
 
-      {/* soft AO that darkens the tube under the band (masked to tube) */}
       <filter id={`${uid}_bandAO`} x="-40%" y="-40%" width="180%" height="180%">
         <feGaussianBlur stdDeviation="1.4" />
       </filter>
@@ -927,21 +927,108 @@ function Mounts({
 }) {
   if (!show) return null
 
+  function rectPath(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    tl: number,
+    tr: number,
+    br: number,
+    bl: number
+  ) {
+    tl = Math.max(0, Math.min(tl, w / 2, h / 2))
+    tr = Math.max(0, Math.min(tr, w / 2, h / 2))
+    br = Math.max(0, Math.min(br, w / 2, h / 2))
+    bl = Math.max(0, Math.min(bl, w / 2, h / 2))
+
+    return [
+      `M ${x + tl} ${y}`,
+      `H ${x + w - tr}`,
+      tr ? `A ${tr} ${tr} 0 0 1 ${x + w} ${y + tr}` : `L ${x + w} ${y}`,
+      `V ${y + h - br}`,
+      br ? `A ${br} ${br} 0 0 1 ${x + w - br} ${y + h}` : `L ${x + w} ${y + h}`,
+      `H ${x + bl}`,
+      bl ? `A ${bl} ${bl} 0 0 1 ${x} ${y + h - bl}` : `L ${x} ${y + h}`,
+      `V ${y + tl}`,
+      tl ? `A ${tl} ${tl} 0 0 1 ${x + tl} ${y}` : `L ${x} ${y}`,
+      `Z`,
+    ].join(' ')
+  }
   const drawBand = (x: number, y: number, angleDeg: number, key: string) => {
-
     const WAcross = Math.max(stroke + bandWrap * 2, stroke + 2)
-
     const W = WAcross
-
     const H = Math.max(3, bandSpan)
 
-    const edgeLen = Math.max(2, stroke * (0.7))
-    const underW =  W * 1.75
+    const gap = 0
+    const plateW = W / 2.3
+    const plateH = H - 1.6
+    const plateR = bandCorner
+
+    const edgeLen = Math.max(2, stroke * 0.7)
+    const underW = W * 1.75
+
+    const Flange = ({ side }: { side: -1 | 1 }) => {
+      const cx = side * (W / 2 + gap + plateW / 2)
+      const x = cx - plateW / 2
+      const y = -plateH / 2
+
+      const hexPoints = (cx: number, cy: number, r: number) =>
+        Array.from({ length: 6 }, (_, i) => {
+          const a = (Math.PI / 3) * i + Math.PI / 6
+          return `${Q(cx + r * Math.cos(a))},${Q(cy + r * Math.sin(a))}`
+        }).join(' ')
+
+      const boltHead = stroke * 0.25
+      const bevelRadius = boltHead * 0.6
+
+      const radii =
+        side === -1
+          ? { tl: plateR, tr: 0, br: 0, bl: plateR }
+          : { tl: 0, tr: plateR, br: plateR, bl: 0 }
+
+      const platePath = rectPath(x, y, plateW, plateH, radii.tl, radii.tr, radii.br, radii.bl)
+
+      return (
+        <g>
+          <path d={platePath} fill={`url(#${uid}_faceAxial)`} />
+          <path d={platePath} fill={`url(#${uid}_edgeVignette)`} />
+          <path
+            d={`M ${cx - plateW * 0.35} ${-plateH * 0.2} L ${cx + plateW * 0.35} ${-plateH * 0.2}`}
+            stroke={`url(#${uid}_glint)`}
+            strokeWidth={Math.max(0.6, plateH * 0.1)}
+            strokeLinecap="round"
+            opacity="0.45"
+          />
+
+          <g filter={`url(#${uid}_elev)`}>
+            <polygon
+              points={hexPoints(cx, 0, boltHead)}
+              fill={`url(#${uid}_faceAxial)`}
+              stroke="rgba(0,0,0,0.25)"
+              strokeWidth={boltHead * 0.1}
+              vectorEffect="non-scaling-stroke"
+            />
+
+            <circle
+              cx={cx}
+              cy={0}
+              r={bevelRadius}
+              fill={`url(#${uid}_edgeVignette)`}
+              stroke="rgba(0,0,0,0.25)"
+              strokeWidth={bevelRadius * 0.1}
+              vectorEffect="non-scaling-stroke"
+            />
+          </g>
+        </g>
+      )
+    }
 
     return (
       <g key={key} transform={`translate(${Q(x)} ${Q(y)}) rotate(${Q(angleDeg)})`}>
-        {/* --- edge occlusion (sells the wrap) --- */}
-        {/* above the strap */}
+        <Flange side={-1} />
+        <Flange side={+1} />
+
         <rect
           x={-underW / 2}
           y={-H / 2 - edgeLen}
@@ -952,7 +1039,6 @@ function Mounts({
           opacity={0.65}
           filter={`url(#${uid}_bandAO)`}
         />
-        {/* below the strap */}
         <rect
           x={-underW / 2}
           y={H / 2}
@@ -964,21 +1050,6 @@ function Mounts({
           filter={`url(#${uid}_bandAO)`}
         />
 
-        {/* AO directly under the strap */}
-        <rect
-          x={-W / 2}
-          y={-(stroke / 2 + bandWrap)}
-          width={W}
-          height={stroke + bandWrap * 2}
-          rx={bandCorner * 0.6}
-          ry={bandCorner * 0.6}
-          fill="#000"
-          opacity="0.28"
-          filter={`url(#${uid}_bandAO)`}
-          mask={`url(#${uid}_tubeMask)`}
-        />
-
-        {/* strap face (flat, not a puck) */}
         <rect
           x={-W / 2}
           y={-H / 2}
@@ -1008,8 +1079,6 @@ function Mounts({
           fill={`url(#${uid}_edgeVignette)`}
           opacity="0.5"
         />
-
-        {/* thin diagonal glint */}
         <path
           d={`M ${-W * 0.35} ${-H * 0.25} L ${W * 0.35} ${-H * 0.25}`}
           stroke={`url(#${uid}_glint)`}
@@ -1017,8 +1086,6 @@ function Mounts({
           strokeLinecap="round"
           opacity="0.55"
         />
-
-        {/* subtle neon tint when ON */}
         <motion.rect
           x={-W / 2}
           y={-H / 2}
@@ -1037,26 +1104,22 @@ function Mounts({
     )
   }
 
-  // -------- placement (centered on tube) --------
   if (geom.kind === 'circle') {
     const { cx, cy, r } = geom
     const angles = mountAngles?.length
       ? mountAngles
       : Array.from({ length: mountCount }, (_, i) => mountStartDeg + (i * 360) / mountCount)
-
-    // strap must be perpendicular to the tube (i.e., along the tangent)
     return (
       <g>
         {angles.map((a, i) => {
           const p = polarQ(a, r, cx, cy)
-          const angle = a + 180 // tangent direction
-          return drawBand(p.x, p.y, angle, `band_l_${i}`)
+          const angle = a + 180 // tangent
+          return drawBand(p.x, p.y, angle, `band_c_${i}`)
         })}
       </g>
     )
   }
 
-  // line: fractions along the line with optional padding
   const { x1, y1, x2, y2, axis } = geom
   const dx = x2 - x1
   const dy = y2 - y1
@@ -1136,7 +1199,7 @@ export function NeonLight({
   mountStartDeg = 0,
   mountLinePadStart = 0,
   mountLinePadEnd = 0,
-  mountBandSpan = 16, 
+  mountBandSpan = 12,
   mountBandWrap,
   mountBandCorner,
 

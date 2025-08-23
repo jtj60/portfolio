@@ -4,6 +4,7 @@ import SectionTitle from '@/components/custom/homepage/sectionTitle'
 import Skills from '@/components/custom/homepage/skills'
 import Timeline from '@/components/custom/homepage/timeline'
 import { Button } from '@/components/ui/button'
+import ControlPanel from '@/components/ui/control-panel'
 import { GlassMountCard } from '@/components/ui/glass-mount'
 import { NeonLight } from '@/components/ui/neon-lights'
 import { useLightsStore } from '@/store/lightsStore'
@@ -22,7 +23,7 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-5 md:gap-10 font-sans items-center justify-items-center min-h-screen max-w-7xl">
       <Hero />
-
+      <div className="flex justify-center md:justify-start w-1/2"></div>
       <Skills />
       <div className="flex flex-col gap-0 w-full">
         <Timeline />
@@ -33,10 +34,10 @@ export default function Home() {
 }
 
 function HeroImage() {
-  const { lightsOn } = useLightsStore()
+  const { lightsOn, light } = useLightsStore()
 
   return (
-    <div className="flex justify-center items-center w-full">
+    <div className="flex justify-center items-center w-full p-4 md:p-0">
       <div className="relative size-[360px] md:size-[500px]">
         <GlassMountCard
           className="w-full h-full relative rounded-full z-10"
@@ -59,7 +60,7 @@ function HeroImage() {
         <NeonLight
           lightsOn={lightsOn}
           stroke={8}
-          color="#ec4fb4"
+          color={light.hex}
           glowBlend="screen"
           glowWidthBoost={10}
           glowSpread={10}
@@ -71,7 +72,9 @@ function HeroImage() {
           onMs={10}
           offMs={10}
           easing="easeInOut"
-          className="z-20 -m-4"
+          className="z-20 -m-6"
+          mountStartDeg={30}
+          mountCount={3}
         />
       </div>
     </div>
@@ -80,44 +83,46 @@ function HeroImage() {
 
 function Hero() {
   return (
-    <div className="flex items-center justify-between w-full h-full max-w-7xl md:mt-15">
-      <div className="flex flex-col gap-5 md:gap-15 w-full">
-        <GlassMountCard
-          className="rounded-xl h-full p-8 mr-auto"
-          rectMode="corners"
-          cornerInset={14}
-          steelTheme="dark"
-          blur={3}
-          elevation={0.2}
-          brightness={1.1}
-          mountRadius={5}
-          showRim={true}
-        >
-          <div className="flex flex-col w-full gap-5 md:gap-10">
-            <div className="flex flex-col items-start gap-1 w-full">
-              <h2 className="text-2xl md:text-3xl text-neutral-800">Hello, I'm</h2>
-              <h1 className="text-4xl md:text-6xl text-neutral-900 font-bold">Jacob Johnson</h1>
-            </div>
-            <div className="md:hidden">
-              <HeroImage />
-            </div>
-
-            <Info />
-          </div>
-        </GlassMountCard>
-
-        <SocialLinks />
-        <div className="flex justify-center md:justify-start w-full">
-          <Button className="relative w-full mx-14 md:mx-0 md:w-80 p-6 bg-card text-neutral-800 raised-off-page flex items-center gap-1 rounded-lg text-lg">
-            <DownloadIcon size={32} className="text-white/80" />
-            Download CV
-          </Button>
+    <>
+      <div className="hidden md:flex items-center justify-between items-center w-full max-w-7xl md:mt-15 md:gap-20">
+        <div className="flex flex-col gap-5 md:gap-15 w-full">
+          <Name />
+          <ControlPanel />
         </div>
-      </div>
-      <div className="hidden md:flex">
         <HeroImage />
       </div>
-    </div>
+      <div className="flex flex-col md:hidden items-center justify-between items-center w-full gap-10">
+        <Name />
+        <HeroImage />
+        <ControlPanel />
+      </div>
+    </>
+  )
+}
+
+function Name() {
+  return (
+    <>
+      <GlassMountCard
+        className="rounded-xl h-full p-8"
+        rectMode="corners"
+        cornerInset={14}
+        steelTheme="dark"
+        blur={3}
+        elevation={0.2}
+        brightness={1.1}
+        mountRadius={5}
+        showRim={true}
+      >
+        <div className="flex flex-col w-full gap-5 md:gap-10">
+          <div className="flex flex-col items-start gap-1 w-full">
+            <h2 className="text-2xl md:text-3xl text-neutral-800">Hello, I'm</h2>
+            <h1 className="text-4xl md:text-6xl text-neutral-900 font-bold">Jacob Johnson</h1>
+          </div>
+          <Info />
+        </div>
+      </GlassMountCard>
+    </>
   )
 }
 

@@ -1,0 +1,25 @@
+.panel-concrete-inset {
+  @apply shadow-[inset_0_-4px_0px_hsla(0,0%,100%,0.1),inset_0_4px_4px_hsla(0,0%,0%,0.2)]
+    dark:shadow-[inset_0_-4px_0px_hsla(0,0%,99%,1),inset_0_4px_4px_hsla(0,0%,0%,0.1)]
+    bg-popover
+    rounded-3xl
+    w-full h-full p-5;
+}
+.panel-concrete-raised {
+  @apply shadow-[inset_0px_3px_0px_hsla(0,0%,100%,.09),0px_5px_6px_hsla(0,0%,0%,.4)]
+  dark:shadow-[inset_0px_3px_0px_hsla(0,0%,99%,1),0px_5px_6px_hsla(0,0%,0%,.2)]
+  bg-popover
+  rounded-lg
+  w-full h-full p-2;
+}
+
+.panel-metal-inset {
+  @apply shadow-[inset_0_-4px_0px_hsla(0,0%,100%,0.1),inset_0_4px_4px_hsla(0,0%,0%,0.2)]
+    dark:shadow-[inset_0_-4px_0px_hsla(0,0%,99%,1),inset_0_4px_4px_hsla(0,0%,0%,0.1)];
+}
+.panel-metal-raised {
+  @apply shadow-[inset_0px_2px_0px_hsla(0,0%,100%,.05),0px_5px_6px_hsla(0,0%,0%,.2)]
+  dark:shadow-[inset_0px_2px_0px_hsla(0,0%,99%,1),0px_5px_6px_hsla(0,0%,0%,.2)];
+}
+
+
